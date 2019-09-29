@@ -41,6 +41,9 @@ var Grid = (function (_super) {
                 case Grid.TYPE_WALL:
                     color = 0x000000;
                     break;
+                case Grid.TYPE_END:
+                    color = 0x000080;
+                    break;
             }
             this._grid.graphics.beginFill(color);
             this._grid.graphics.lineStyle(2, 0x111111);
@@ -52,6 +55,7 @@ var Grid = (function (_super) {
     });
     Grid.TYPE_WALL = "wall";
     Grid.TYPE_ROLE = "role";
+    Grid.TYPE_END = "end";
     Grid.TYPE_NULL = "null";
     return Grid;
 }(egret.Sprite));

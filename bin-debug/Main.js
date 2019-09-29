@@ -166,7 +166,7 @@ var Main = (function (_super) {
      * Create scene interface
      */
     Main.prototype.createGameScene = function () {
-        var scene = new MyScene(null);
+        var scene = new MyScene();
         this.addChild(scene);
     };
     /**

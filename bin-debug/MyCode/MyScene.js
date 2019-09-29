@@ -10,9 +10,13 @@ r.prototype = e.prototype, t.prototype = new r();
 };
 var MyScene = (function (_super) {
     __extends(MyScene, _super);
-    function MyScene(parameters) {
+    /*****************界面*****************/
+    /*************************************/
+    function MyScene() {
         var _this = _super.call(this) || this;
+        /*****************数据******************/
         _this._gridList = [];
+        _this._currentType = Grid.TYPE_NULL;
         _this.stageWidth = 860;
         _this.stageHeight = 460;
         _this.gridWidth = 20;
@@ -22,10 +26,17 @@ var MyScene = (function (_super) {
         return _this;
     }
     MyScene.prototype.initView = function () {
+        var btnWall = this.createBtn("wall", function (e) {
+        });
+        var btnRole = this.createBtn("role", function (e) {
+        });
+        var btnEnd = this.createBtn("end", function (e) {
+        });
         this.drawBg();
         this.initAllGrid();
     };
     MyScene.prototype.initEvent = function () {
+        this._currentType = Grid.TYPE_NULL;
         this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.changeType, this);
         this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.changeType, this);
     };
@@ -34,7 +45,7 @@ var MyScene = (function (_super) {
         var y = Math.floor((e.stageY - this.actStage.y) / this.gridWidth);
         if (x >= 0 && x < this._gridList.length
             && y >= 0 && y < this._gridList[x].length) {
-            this._gridList[x][y].type = Grid.TYPE_WALL;
+            this._gridList[x][y].type = this._currentType;
         }
     };
     MyScene.prototype.drawBg = function () {
@@ -62,6 +73,28 @@ var MyScene = (function (_super) {
             this._gridList.push(tmp);
         }
     };
+    /***********方法************ */
+    /**
+     * 创建按钮 eui.Button
+     * @param name 按钮名字
+     * @param fun 按钮回调
+     * @return 返回这个按钮
+     */
+    MyScene.prototype.createBtn = function (name, fun) {
+        var button = new eui.Button();
+        button.label = name;
+        button.horizontalCenter = 0;
+        button.verticalCenter = 0;
+        this.addChild(button);
+        button.addEventListener(egret.TouchEvent.TOUCH_TAP, fun, this);
+        return button;
+    };
+    /**
+     * 根据X、Y画出这个格子
+     * @param x y
+     * @param fun 按钮回调
+     * @return 返回这个按钮
+     */
     MyScene.prototype.drawGridByXY = function (x, y, type) {
         if (type === void 0) { type = Grid.TYPE_NULL; }
         var grid = new Grid(type);
@@ -69,12 +102,6 @@ var MyScene = (function (_super) {
         grid.x = x * this.gridWidth;
         grid.y = y * this.gridWidth;
         return grid;
-    };
-    MyScene.prototype.getXYByStagePoint = function (x, y) {
-        var pos = new egret.Point();
-        if (x - this.actStage.x) {
-        }
-        return pos;
     };
     return MyScene;
 }(eui.UILayer));
