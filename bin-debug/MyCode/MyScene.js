@@ -12,6 +12,7 @@ var MyScene = (function (_super) {
     __extends(MyScene, _super);
     function MyScene(parameters) {
         var _this = _super.call(this) || this;
+        _this._gridList = [];
         _this.stageWidth = 860;
         _this.stageHeight = 460;
         _this.gridWidth = 20;
@@ -25,9 +26,16 @@ var MyScene = (function (_super) {
         this.initAllGrid();
     };
     MyScene.prototype.initEvent = function () {
-        this.actStage.addEventListener(egret.TouchEvent.TOUCH_BEGIN, function (e) {
-            e.stageX;
-        }, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.changeType, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.changeType, this);
+    };
+    MyScene.prototype.changeType = function (e) {
+        var x = Math.floor((e.stageX - this.actStage.x) / this.gridWidth);
+        var y = Math.floor((e.stageY - this.actStage.y) / this.gridWidth);
+        if (x >= 0 && x < this._gridList.length
+            && y >= 0 && y < this._gridList[x].length) {
+            this._gridList[x][y].type = Grid.TYPE_WALL;
+        }
     };
     MyScene.prototype.drawBg = function () {
         //主舞台
@@ -47,16 +55,26 @@ var MyScene = (function (_super) {
         var col = this.stageWidth / this.gridWidth;
         var row = this.stageHeight / this.gridHeight;
         for (var i = 0; i < col; i++) {
+            var tmp = [];
             for (var j = 0; j < row; j++) {
-                this.drawGridByXY(i, j);
+                tmp.push(this.drawGridByXY(i, j));
             }
+            this._gridList.push(tmp);
         }
     };
-    MyScene.prototype.drawGridByXY = function (x, y) {
-        var grid = new Grid();
+    MyScene.prototype.drawGridByXY = function (x, y, type) {
+        if (type === void 0) { type = Grid.TYPE_NULL; }
+        var grid = new Grid(type);
         this.actStage.addChild(grid);
         grid.x = x * this.gridWidth;
         grid.y = y * this.gridWidth;
+        return grid;
+    };
+    MyScene.prototype.getXYByStagePoint = function (x, y) {
+        var pos = new egret.Point();
+        if (x - this.actStage.x) {
+        }
+        return pos;
     };
     return MyScene;
 }(eui.UILayer));

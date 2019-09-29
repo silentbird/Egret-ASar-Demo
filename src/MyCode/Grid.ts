@@ -1,6 +1,7 @@
 class Grid extends egret.Sprite {
     public static TYPE_WALL: string = "wall";
     public static TYPE_ROLE: string = "role";
+    public static TYPE_END: string = "end";
     public static TYPE_NULL: string = "null";
     private _type: string;
     private _grid: egret.Shape
@@ -17,11 +18,11 @@ class Grid extends egret.Sprite {
         this.type = this._type;
     }
 
-    private get type(): string {
+    public get type(): string {
         return this._type;
     }
 
-    private set type(type: string) {
+    public set type(type: string) {
         this._type = type;
         //制图
         this._grid.graphics.clear();
@@ -35,6 +36,9 @@ class Grid extends egret.Sprite {
                 break;
             case Grid.TYPE_WALL:
                 color = 0x000000;
+                break;
+            case Grid.TYPE_END:
+                color = 0x000080;
                 break;
         }
         this._grid.graphics.beginFill(color);
