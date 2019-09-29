@@ -13,25 +13,27 @@ var Grid = (function (_super) {
     function Grid(type) {
         if (type === void 0) { type = Grid.TYPE_NULL; }
         var _this = _super.call(this) || this;
-        _this._type = type;
         _this.init();
         return _this;
     }
     Grid.prototype.init = function () {
         this._grid = new egret.Shape();
         this.addChild(this._grid);
-        this.type = this._type;
+        this.type = Grid.TYPE_NULL;
     };
     Object.defineProperty(Grid.prototype, "type", {
         get: function () {
             return this._type;
         },
-        set: function (type) {
-            this._type = type;
+        set: function (_type) {
+            if (this.type == _type) {
+                return;
+            }
+            this._type = _type;
             //制图
             this._grid.graphics.clear();
             var color;
-            switch (type) {
+            switch (_type) {
                 case Grid.TYPE_NULL:
                     color = 0xFFFFFF;
                     break;
@@ -56,7 +58,7 @@ var Grid = (function (_super) {
     Grid.TYPE_WALL = "wall";
     Grid.TYPE_ROLE = "role";
     Grid.TYPE_END = "end";
-    Grid.TYPE_NULL = "null";
+    Grid.TYPE_NULL = "nll";
     return Grid;
 }(egret.Sprite));
 __reflect(Grid.prototype, "Grid");

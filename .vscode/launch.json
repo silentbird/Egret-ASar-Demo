@@ -8,10 +8,10 @@
             "name": "使用本机 Chrome 调试",
             "type": "chrome",
             "request": "launch",
-             "file": "${workspaceFolder}/index.html",
-            // "runtimeArgs": [
-            //     "-disable-web-security"
-            // ],
+            "file": "${workspaceFolder}/index.html",
+            "runtimeArgs": [
+                "-disable-web-security"
+            ],
             "preLaunchTask": "build",
             "port": 3000
         }

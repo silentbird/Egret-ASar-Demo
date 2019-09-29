@@ -10,7 +10,6 @@ r.prototype = e.prototype, t.prototype = new r();
 };
 var MyScene = (function (_super) {
     __extends(MyScene, _super);
-    /*****************界面*****************/
     /*************************************/
     function MyScene() {
         var _this = _super.call(this) || this;
@@ -26,26 +25,67 @@ var MyScene = (function (_super) {
         return _this;
     }
     MyScene.prototype.initView = function () {
-        var btnWall = this.createBtn("wall", function (e) {
-        });
-        var btnRole = this.createBtn("role", function (e) {
-        });
-        var btnEnd = this.createBtn("end", function (e) {
-        });
         this.drawBg();
         this.initAllGrid();
+        var base = this;
+        this.btnWall = this.createBtn("wall", function (e) {
+            base._currentType = Grid.TYPE_WALL;
+        });
+        this.btnWall.x = 60;
+        this.btnWall.y = 520;
+        this.btnRole = this.createBtn("role", function (e) {
+            base._currentType = Grid.TYPE_ROLE;
+        });
+        this.btnRole.x = 360;
+        this.btnRole.y = 520;
+        this.btnEnd = this.createBtn("end", function (e) {
+            base._currentType = Grid.TYPE_END;
+        });
+        this.btnEnd.x = 660;
+        this.btnEnd.y = 520;
+    };
+    MyScene.prototype.setBtnEnabled = function (btn, bool) {
+        var grayMatrix = [
+            0.3, 0.6, 0, 0, 0,
+            0.3, 0.6, 0, 0, 0,
+            0.3, 0.6, 0, 0, 0,
+            0, 0, 0, 1, 0
+        ];
+        var sourceMatrix = [
+            1, 0, 0, 0, 0,
+            0, 1, 0, 0, 0,
+            0, 0, 1, 0, 0,
+            0, 0, 0, 1, 0
+        ];
+        var colorFlilter = new egret.ColorMatrixFilter(bool ? grayMatrix : sourceMatrix);
+        btn.enabled = bool;
+        btn.filters = [colorFlilter];
     };
     MyScene.prototype.initEvent = function () {
         this._currentType = Grid.TYPE_NULL;
-        this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.changeType, this);
-        this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.changeType, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onStageClick, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onStageClick, this);
     };
-    MyScene.prototype.changeType = function (e) {
+    MyScene.prototype.onStageClick = function (e) {
         var x = Math.floor((e.stageX - this.actStage.x) / this.gridWidth);
         var y = Math.floor((e.stageY - this.actStage.y) / this.gridWidth);
         if (x >= 0 && x < this._gridList.length
             && y >= 0 && y < this._gridList[x].length) {
             this._gridList[x][y].type = this._currentType;
+            switch (this._currentType) {
+                case Grid.TYPE_ROLE:
+                    this._role = this._gridList[x][y];
+                    this.setBtnEnabled(this.btnRole, false);
+                    this._currentType = Grid.TYPE_NULL;
+                    break;
+                case Grid.TYPE_END:
+                    this._end = this._gridList[x][y];
+                    this.setBtnEnabled(this.btnEnd, false);
+                    this._currentType = Grid.TYPE_NULL;
+                    break;
+                default:
+                    break;
+            }
         }
     };
     MyScene.prototype.drawBg = function () {
@@ -83,8 +123,8 @@ var MyScene = (function (_super) {
     MyScene.prototype.createBtn = function (name, fun) {
         var button = new eui.Button();
         button.label = name;
-        button.horizontalCenter = 0;
-        button.verticalCenter = 0;
+        button.width = 80;
+        button.height = 40;
         this.addChild(button);
         button.addEventListener(egret.TouchEvent.TOUCH_TAP, fun, this);
         return button;

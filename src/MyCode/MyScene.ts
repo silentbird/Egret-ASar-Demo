@@ -2,10 +2,15 @@ class MyScene extends eui.UILayer {
 
     /*****************数据******************/
     private _gridList = [];
+    private _role: Grid;
+    private _end: Grid;
     private _currentType: string = Grid.TYPE_NULL;
 
     /*****************界面*****************/
-
+    private btnRole: eui.Button;
+    private btnWall: eui.Button;
+    private btnEnd: eui.Button;
+    private actStage: egret.Sprite;
     /*************************************/
     constructor() {
         super();
@@ -17,39 +22,76 @@ class MyScene extends eui.UILayer {
     private stageHeight: number = 460;
     private gridWidth: number = 20;
     private gridHeight: number = 20;
-    private actStage: egret.Sprite;
 
     private initView() {
-        let btnWall = this.createBtn("wall", function (e: egret.TouchEvent) {
-
-        });
-
-        let btnRole = this.createBtn("role", function (e: egret.TouchEvent) {
-
-        });
-
-        let btnEnd = this.createBtn("end", function (e: egret.TouchEvent) {
-
-        });
-
         this.drawBg();
         this.initAllGrid();
+
+        let base = this;
+        this.btnWall = this.createBtn("wall", function (e: egret.TouchEvent) {
+            base._currentType = Grid.TYPE_WALL;
+        });
+        this.btnWall.x = 60;
+        this.btnWall.y = 520;
+
+        this.btnRole = this.createBtn("role", function (e: egret.TouchEvent) {
+            base._currentType = Grid.TYPE_ROLE;
+        });
+        this.btnRole.x = 360;
+        this.btnRole.y = 520;
+
+        this.btnEnd = this.createBtn("end", function (e: egret.TouchEvent) {
+            base._currentType = Grid.TYPE_END;
+        });
+        this.btnEnd.x = 660;
+        this.btnEnd.y = 520;
+
     }
 
-
+    private setBtnEnabled(btn: eui.Button, bool: boolean): void {
+        var grayMatrix = [
+            0.3, 0.6, 0, 0, 0,
+            0.3, 0.6, 0, 0, 0,
+            0.3, 0.6, 0, 0, 0,
+            0, 0, 0, 1, 0
+        ];
+        var sourceMatrix = [
+            1, 0, 0, 0, 0,
+            0, 1, 0, 0, 0,
+            0, 0, 1, 0, 0,
+            0, 0, 0, 1, 0
+        ];
+        var colorFlilter = new egret.ColorMatrixFilter(bool ? grayMatrix : sourceMatrix);
+        btn.enabled = bool;
+        btn.filters = [colorFlilter];
+    }
 
     private initEvent() {
         this._currentType = Grid.TYPE_NULL;
-        this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.changeType, this);
-        this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.changeType, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onStageClick, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onStageClick, this);
     }
 
-    private changeType(e: egret.TouchEvent) {
+    private onStageClick(e: egret.TouchEvent) {
         var x: number = Math.floor((e.stageX - this.actStage.x) / this.gridWidth);
         var y: number = Math.floor((e.stageY - this.actStage.y) / this.gridWidth);
         if (x >= 0 && x < this._gridList.length
             && y >= 0 && y < this._gridList[x].length) {
             this._gridList[x][y].type = this._currentType;
+            switch (this._currentType) {
+                case Grid.TYPE_ROLE:
+                    this._role = this._gridList[x][y];
+                    this.setBtnEnabled(this.btnRole, false);
+                    this._currentType = Grid.TYPE_NULL;
+                    break;
+                case Grid.TYPE_END:
+                    this._end = this._gridList[x][y];
+                    this.setBtnEnabled(this.btnEnd, false);
+                    this._currentType = Grid.TYPE_NULL;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -82,7 +124,7 @@ class MyScene extends eui.UILayer {
         }
     }
     /***********方法************ */
-    
+
     /**
      * 创建按钮 eui.Button
      * @param name 按钮名字
@@ -92,8 +134,8 @@ class MyScene extends eui.UILayer {
     private createBtn(name: string, fun: Function): eui.Button {
         let button = new eui.Button();
         button.label = name;
-        button.horizontalCenter = 0;
-        button.verticalCenter = 0;
+        button.width = 80;
+        button.height = 40;
         this.addChild(button);
         button.addEventListener(egret.TouchEvent.TOUCH_TAP, fun, this);
         return button;
