@@ -14,7 +14,9 @@
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
 		"bin-debug/ThemeAdapter.js",
-		"bin-debug/MyCode/Grid.js",
-		"bin-debug/MyCode/MyScene.js"
+		"bin-debug/MyCode/Data.js",
+		"bin-debug/MyCode/Manager.js",
+		"bin-debug/MyCode/View.js",
+		"bin-debug/MyCode/other/Grid.js"
 	]
 }

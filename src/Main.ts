@@ -100,8 +100,8 @@ class Main extends eui.UILayer {
      * Create scene interface
      */
     protected createGameScene(): void {
-        var scene: MyScene = new MyScene();
-        this.addChild(scene);
+        var manager: Manager = new Manager();
+        this.addChild(manager);
     }
 
     /**
@@ -132,17 +132,5 @@ class Main extends eui.UILayer {
         };
 
         change();
-    }
-
-    /**
-     * 点击按钮
-     * Click the button
-     */
-    private onButtonClick(e: egret.TouchEvent) {
-        let panel = new eui.Panel();
-        panel.title = "Title";
-        panel.horizontalCenter = 0;
-        panel.verticalCenter = 0;
-        this.addChild(panel);
     }
 }

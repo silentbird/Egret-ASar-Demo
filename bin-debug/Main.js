@@ -166,8 +166,8 @@ var Main = (function (_super) {
      * Create scene interface
      */
     Main.prototype.createGameScene = function () {
-        var scene = new MyScene();
-        this.addChild(scene);
+        var manager = new Manager();
+        this.addChild(manager);
     };
     /**
      * 描述文件加载成功，开始播放动画
@@ -195,17 +195,6 @@ var Main = (function (_super) {
             tw.call(change, _this);
         };
         change();
-    };
-    /**
-     * 点击按钮
-     * Click the button
-     */
-    Main.prototype.onButtonClick = function (e) {
-        var panel = new eui.Panel();
-        panel.title = "Title";
-        panel.horizontalCenter = 0;
-        panel.verticalCenter = 0;
-        this.addChild(panel);
     };
     return Main;
 }(eui.UILayer));
