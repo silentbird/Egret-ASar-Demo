@@ -31,7 +31,5 @@ class Manager extends eui.UILayer {
                 this.data.AllGrid[x][y].setData();
             }
         }
-        this.data.OpenList
-
     }
 }
